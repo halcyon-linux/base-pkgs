@@ -1,0 +1,16 @@
+# base-pkgs Copr repo via the Cloudflare mirror — same content as
+# repo/base-pkgs.repo, served through the Worker in repo/cloudflare-worker.js
+# (dramatically faster than the direct Copr route in some regions). Same
+# priority=1 semantics — do NOT enable both at once.
+
+[base-pkgs-r2-mirror]
+name=base-pkgs (aahsnr-work) — Cloudflare mirror — priority 1
+baseurl=https://halcyon-mirror.aahsnr041.workers.dev/fedora-$releasever-x86_64/
+type=rpm-md
+skip_if_unavailable=False
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/aahsnr-work/base-pkgs/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+priority=1
