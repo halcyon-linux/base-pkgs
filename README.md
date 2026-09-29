@@ -21,8 +21,9 @@ applications · fonts · texlive-packages · linux-p03.
 - `repoclosure.yml` — nightly (05:43 UTC) + post-cascade closure check of
   the published Copr repo against Fedora 44/45 (+ Terra and the
   lionheartp bootstrap repo).
-- `builder-docker.yml` — builds the shared CI job image and pushes it to
-  `ghcr.io/halcyon-linux/halcyon-builder:f44` (consumed by all six repos).
+- `builder-docker.yml` — builds this repo's own CI job image and pushes
+  it to `ghcr.io/halcyon-linux/base-pkgs-builder:f44` (consumed by this
+  repo's build and sweep jobs).
 
 
 ## Layout
