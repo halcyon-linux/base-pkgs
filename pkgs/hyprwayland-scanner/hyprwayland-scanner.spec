@@ -21,6 +21,8 @@ BuildRequires:  gcc-c++
 %package        devel
 Summary:        A Hyprland implementation of wayland-scanner, in and for C++
 
+Requires:       %{name} = %{version}-%{release}
+
 %description    devel
 %{summary}.
 

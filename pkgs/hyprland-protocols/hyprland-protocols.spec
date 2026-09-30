@@ -17,6 +17,8 @@ BuildRequires:  cmake
 %package        devel
 Summary:        Wayland protocol extensions for Hyprland
 
+Requires:       %{name} = %{version}-%{release}
+
 %description    devel
 %{summary}.
 

@@ -23,6 +23,8 @@ BuildRequires:  gcc-c++
 Summary:        Development files for %{name}
 BuildArch:      noarch
 Provides:       %{name}-static = %{version}-%{release}
+Requires:       %{name} = %{version}-%{release}
+
 %description    devel
 Development files for %{name}.
 
