@@ -205,7 +205,7 @@ feed = "github-release"
 repo = "eworm-de/xcur2png"
 
 [nwg-look]
-batch = 0
+batch = 1
 
 [nwg-look.updates]
 feed = "github-release"
@@ -228,9 +228,4 @@ batch = 0
 feed = "github-release"
 repo = "lassekongo83/adw-gtk3"
 
-# texlive: the Arch-style group split, rolled biweekly — 40 generated specs
-# (39 collection groups + texlive-meta) owned by the texlive roll workflow
-# (.github/workflows/texlive-update.yml -> tools/texlive-splitter/roll.py),
-# no updates tables (the Monday sweep never touches them). onlyoffice and
-# noctalia-git sit in batch 3 (the heavy vendor rewrap and the shell); batch 4
-# is intentionally empty.
+
