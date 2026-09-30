@@ -5,10 +5,16 @@
 #
 # Patch: upstream's alpha un-premultiply divides by 256 instead of 255;
 # the fix is eworm's own (upstream-merged), carried in the reference repo.
+#
+# The source is 2020-era K&R-style C (`extern dry_run;` etc.) — Fedora 44's
+# GCC treats implicit int as a hard error, so the modern-C porting macro
+# (the reference spec carries it for exactly this reason) relaxes the
+# errors instead of patching the vintage declarations.
+%global build_type_safety_c 0
 
 Name:           xcur2png
 Version:        0.7.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 %define debug_package %{nil}
 Summary:        Convert X cursors to PNG images
 
