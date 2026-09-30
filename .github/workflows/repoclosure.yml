@@ -95,9 +95,7 @@ jobs:
         run: |
           set -eu
           # this project's consumer drop-in lives in repo/ — install it so
-          # the closure check sees exactly what consumers see. (The
-          # base-pkgs-mirror.repo alternative is NOT installed: it proxies the
-          # core repo only and would double-enable the desktop packages.)
+          # the closure check sees exactly what consumers see.
           cp "repo/base-pkgs.repo" /etc/yum.repos.d/
           cat > /etc/yum.repos.d/terra.repo <<'EOF'
           [terra]
