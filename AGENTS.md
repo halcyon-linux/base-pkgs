@@ -113,6 +113,10 @@ mock -r /tmp/copr.cfg <srpm>
   - `install -t DIR SRC` keeps SRC's basename — `%files` must claim the
     name as installed. Prefer explicit
     `install -Dm644 SRC %{buildroot}%{dir}/NAME`.
+- Several specs pin literal SONAME `%files` lines (hyprutils `.so.13`,
+  hyprlang `.so.2`, aquamarine `.so.14`, …): an upstream SOVERSION bump
+  after an automatic sweep fails the build loudly on unpackaged files.
+  That is the intended guard — fix the %files lines with the version.
 - `repo/` carries this project's consumer drop-in — repoclosure installs
   it and checks THIS repo's project against Fedora (+ Terra), exactly what
   a halcyon-image consumer sees.

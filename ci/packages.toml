@@ -17,10 +17,15 @@
 # priority bootstrap for fresh projects; once our own builds exist, the
 # project repo wins.
 #
-# batch 0  roots: Fedora-only build deps and leaf tools
-# batch 1  first level: hyprlang, aquamarine, hyprgraphics, hyprwire
-# batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit
-# batch 3  third level: hyprland-git, hyprland-guiutils, hyprpwcenter, hyprshutdown, noctalia-git
+# batch 0  roots: Fedora-only build deps and leaf tools (hyprutils,
+#          hyprwayland-scanner, hyprland-protocols, glaze, pyprland,
+#          nwg-displays, xcur2png, qt6ct, adw-gtk3)
+# batch 1  first level: hyprlang, aquamarine, hyprgraphics, hyprwire,
+#          noctalia-greeter-git, nwg-look (runtime-requires xcur2png)
+# batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit,
+#          xdg-desktop-portal-hyprland
+# batch 3  third level: hyprland-git, hyprland-guiutils, hyprpwcenter,
+#          hyprshutdown, noctalia-git
 # The optional [pkg.updates] table drives the daily sweep (update.yml):
 #   feed = "github-release"  + repo = "owner/name"   latest GitHub release tag
 #   feed = "github-tag"      + repo = "owner/name"   newest git tag
@@ -181,9 +186,8 @@ batch = 3
 feed = "github-release"
 repo = "hyprwm/hyprshutdown"
 
-# ------------------------------------------------------------------- apps
-# bun tracks terrapkg's spec: the -baseline build of bun's release zip
-# with shell completions. Its version follows the LATEST file of oven-sh/bun.
+# nwg-displays: pure-Python nwg-shell output configurator (upstream:
+# nwg-piotr/nwg-displays); version follows the newest git tag.
 [nwg-displays]
 batch = 0
 
@@ -191,9 +195,6 @@ batch = 0
 feed = "github-tag"
 repo = "nwg-piotr/nwg-displays"
 
-# ------------------------------------------------------------------- apps
-# distroshelf: GNOME container manager, meson+cargo per upstream's meson.build
-# (crates fetched during the build — the project runs --enable-net on).
 # xcur2png: converts X cursor files to PNGs — nwg-look shells out to it for
 # cursor previews and Fedora ships no package (ported from
 # LionHeartP/hyprlandRPM, alpha-math patch included).

@@ -81,7 +81,11 @@ jobs:
         run: |
           git config user.name "halcyon-autoupdate"
           git config user.email "aahsnr041@proton.me"
+      # continue-on-error: one broken upstream feed must not discard the
+      # good bumps the sweep already wrote — the failed step stays red in
+      # the UI, and the commit below lands whatever succeeded
       - name: Sweep upstream versions
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
@@ -94,7 +98,7 @@ jobs:
             python3 ci/sweep/sweep.py
           fi
       - name: Commit the bumps (mode=commit)
-        if: env.MODE == 'commit' && success()
+        if: env.MODE == 'commit' && !cancelled()
         run: |
           set -eu
           if [ -z "$(git status --porcelain)" ]; then
@@ -120,7 +124,7 @@ jobs:
           echo "bumped and pushed: ${pkgs}"
           # a GITHUB_TOKEN push does not trigger workflow runs — dispatch the
           # cascade explicitly
-          GH_TOKEN="${{ github.token }}" gh workflow run copr-build.yml --ref main
+          GH_TOKEN="${{ github.token }}" gh workflow run copr-build.yml --ref main -f only="$pkgs"
       - name: Open a bump PR (mode=pr)
         if: env.MODE == 'pr' && success()
         env:

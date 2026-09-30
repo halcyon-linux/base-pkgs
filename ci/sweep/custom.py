@@ -1,6 +1,8 @@
-"""The custom version feeds — 1:1 Python ports of the 11 update.rhai scripts
-that carry real logic (the other 35 are one-liner gh()/gh_tag() sweeps driven
-from ci/packages.toml).
+"""The custom version feeds — 1:1 Python ports of the update.rhai scripts
+that carry real logic. This file is shared VERBATIM across the group repos,
+so it carries functions for packages this registry does not build (the
+orphan custom_<name> functions are inert — only the ci/packages.toml
+`feed = "custom"` references are invoked).
 
 Two intentional deviations from the rhai, both bug fixes (the rhai versions
 never ran successfully — see TODO.md's sweep-verification note):

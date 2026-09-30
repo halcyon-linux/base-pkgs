@@ -33,7 +33,7 @@ ci/packages.toml    the registry: build selection + sweep-feed config
 ci/matrix.py        batch/wave build plan (validate job runs it)
 ci/sweep/           the version sweeper + custom feeds
 pkgs/<pkg>/         spec + local sources
-repo/               consumer .repo drop-ins (all six group repos)
+repo/               the base-pkgs.repo consumer drop-in
 templates/          starting points for new specs
 ```
 
