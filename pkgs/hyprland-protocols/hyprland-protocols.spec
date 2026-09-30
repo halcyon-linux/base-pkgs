@@ -1,6 +1,6 @@
 Name:           hyprland-protocols
 Version:	0.7.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 %define debug_package %{nil}
 Summary:        Wayland protocol extensions for Hyprland
 BuildArch:      noarch
@@ -36,11 +36,17 @@ Summary:        Wayland protocol extensions for Hyprland
 %cmake_install
 
 
+# the base/devel split: the base package carries the protocol XMLs (what
+# desktop.yml installs by name), devel the pkgconfig file the pkgconfig()
+# BuildRequires of the consumers resolve through
+%files
+%license LICENSE
+%{_datadir}/%{name}/
+
 %files devel
 %license LICENSE
 %doc README.md
 %{_datadir}/pkgconfig/%{name}.pc
-%{_datadir}/%{name}/
 
 
 %changelog

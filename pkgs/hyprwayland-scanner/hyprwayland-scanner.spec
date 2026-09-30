@@ -1,6 +1,6 @@
 Name:           hyprwayland-scanner
 Version:        0.4.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 %define debug_package %{nil}
 Summary:        A Hyprland implementation of wayland-scanner, in and for C++
 
@@ -34,10 +34,16 @@ Summary:        A Hyprland implementation of wayland-scanner, in and for C++
 %install
 %cmake_install
 
+# the base/devel split: the base package carries the scanner binary (what
+# desktop.yml installs by name), devel the pkgconfig/cmake metadata the
+# pkgconfig() BuildRequires of the consumers resolve through
+%files
+%license LICENSE
+%{_bindir}/%{name}
+
 %files devel
 %license LICENSE
 %doc README.md
-%{_bindir}/%{name}
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}/
 

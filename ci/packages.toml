@@ -194,6 +194,16 @@ repo = "nwg-piotr/nwg-displays"
 # ------------------------------------------------------------------- apps
 # distroshelf: GNOME container manager, meson+cargo per upstream's meson.build
 # (crates fetched during the build — the project runs --enable-net on).
+# xcur2png: converts X cursor files to PNGs — nwg-look shells out to it for
+# cursor previews and Fedora ships no package (ported from
+# LionHeartP/hyprlandRPM, alpha-math patch included).
+[xcur2png]
+batch = 0
+
+[xcur2png.updates]
+feed = "github-release"
+repo = "eworm-de/xcur2png"
+
 [nwg-look]
 batch = 0
 
