@@ -175,16 +175,15 @@ jobs:
             # post-cascade state before judging it
             for p in $COPR_PROJECTS; do copr-cli regenerate-repos "$p"; done
           fi
-          # The Copr drop-ins are priority=1 and shadow Fedora for every name
-          # they build. dnf5's --newest/--best prune the pool to the newest
-          # package per name BEFORE matching, so a same-name Fedora package
-          # with a higher epoch (Fedora 44's texlive-latex/context/pstricks
-          # are epoch 12) shadows the epoch-0 Copr providers and turns their
-          # inter-group version pins into false unresolved deps. A consumer
-          # never sees this: priority=1 wins, and an epoch-0 pin can only
-          # match an epoch-0 provider anyway. Mirror that consumer truth by
-          # excluding every Copr-shadowed name from the Fedora repos here.
-          SHADOW="$(copr-cli list-package-names "aahsnr-work/base-pkgs" | paste -sd, -)"
+          # The drop-in's priority=1 picks one winner per name over Fedora,
+          # Terra and lionheartp, but dnf5's --newest/--best prune the pool to
+          # the newest package per name BEFORE matching and never look at that
+          # priority: a same-name copy elsewhere (Fedora 44's epoch-12
+          # texlive-latex, lionheartp's newer hyprland-git/hyprwire) is kept
+          # instead of this repo's, and the exact-EQ pins within this repo
+          # then read as unresolved. A consumer never sees that, so hand
+          # repoclosure the pool a consumer gets: exclude every name this
+          # project publishes from every other enabled repo.
           attempt=0; max=6
           while :; do
             attempt=$((attempt+1))
@@ -196,17 +195,28 @@ jobs:
               for p in $COPR_PROJECTS; do
                 grp=${p#*/}
                 echo "::group::repoclosure fc$rv ($grp) attempt $attempt"
-                # Per-repo mode: the texlive group repos pair Fedora's engines
-                # (texlive-luatex, texlive-xetex — SAME package names at a
-                # higher epoch, carrying the real binaries) with the epoch-0
-                # data groups. --newest/--best prune the pool per name and
-                # would drop one half of that pair (either the engine needed
-                # for /usr/bin/* file deps or the data copy the snapshot pins
-                # need), so the texlive check runs plain and without the
-                # shadow exclusion — the exact-EQ snapshot pins are the skew
-                # guard there.
+                # The shadow set comes from the served repodata of this chroot,
+                # not from the project's package list: priority=1 covers every
+                # name PUBLISHED here, including SRPMs left over from the
+                # pre-split era that no longer carry a package record (they
+                # are exactly the ones another repo would otherwise win).
+                # Re-read per attempt — a cascade landing mid-retry adds names.
+                # dnf5 prints the queryformat verbatim: the newline escape is
+                # what makes this a list at all — without it the names arrive
+                # glued into one string that excludes nothing.
+                shadow="$(dnf -q --releasever=$rv repoquery \
+                  --repoid="copr:copr.fedorainfracloud.org:aahsnr-work:$grp" \
+                  --qf '%{name}\n' | sort -u | paste -sd, -)"
+                if [ -z "$shadow" ]; then
+                  echo "::error::fc$rv: could not read the names published in $grp"
+                  exit 1
+                fi
                 args=(--check "copr:copr.fedorainfracloud.org:aahsnr-work:$grp"
-                      --setopt "fedora.excludepkgs=$SHADOW" --setopt "updates.excludepkgs=$SHADOW" --newest)
+                      --setopt "fedora.excludepkgs=$shadow"
+                      --setopt "updates.excludepkgs=$shadow"
+                      --setopt "terra.excludepkgs=$shadow"
+                      --setopt "lionheartp.excludepkgs=$shadow"
+                      --newest)
                 if dnf -q --releasever=$rv repoclosure "${args[@]}" \
                   && dnf -q --releasever=$rv repoclosure "${args[@]}" --best; then
                   echo "fc$rv $grp: closed"
