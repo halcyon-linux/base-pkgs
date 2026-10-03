@@ -136,7 +136,22 @@ jobs:
           gpgkey=https://download.copr.fedorainfracloud.org/results/lionheartp/Hyprland/pubkey.gpg
           enabled=1
           EOF
+      - name: Copr credentials
+        env:
+          COPR_CLICONF: ${{ secrets.COPR_CLICONF }}
+        run: |
+          set -eu
+          mkdir -p ~/.config
+          printf '%s\n' "$COPR_CLICONF" > ~/.config/copr
+          chmod 600 ~/.config/copr
+      - name: Install copr-cli
+        run: dnf -qy install copr-cli
       - name: Scope guard (published source packages == pkgs/)
+        # Deliberately last before the check: a failing step skips its
+        # successors, and the closure step needs python3 for its in-flight
+        # probe and copr-cli for the forced regen — both arrive with the
+        # copr-cli install above. Observed in run 37087454880, where this
+        # guard sat first and the probe then failed open (no python3).
         run: |
           set -eu
           # priority=1 in the drop-in ships every name this project publishes
@@ -144,9 +159,8 @@ jobs:
           # package landing outside pkgs/ is invisible to the closure check
           # (a stale bat/uv/texlive resolves perfectly well) while shadowing
           # the real one for every consumer. The rule for this repo is that
-          # the chroot holds exactly what pkgs/ builds; check it before
-          # judging dependencies. fc44 currently serves 86 undeclared source
-          # packages (fedora-copr/copr#4539).
+          # the chroot holds exactly what pkgs/ builds; fc44 currently
+          # serves 86 undeclared source packages (fedora-copr/copr#4539).
           rc=0
           for rv in 44 45; do
             published="$(dnf -q --releasever=$rv repoquery \
@@ -168,16 +182,6 @@ jobs:
             fi
           done
           exit $rc
-      - name: Copr credentials
-        env:
-          COPR_CLICONF: ${{ secrets.COPR_CLICONF }}
-        run: |
-          set -eu
-          mkdir -p ~/.config
-          printf '%s\n' "$COPR_CLICONF" > ~/.config/copr
-          chmod 600 ~/.config/copr
-      - name: Install copr-cli
-        run: dnf -qy install copr-cli
       - name: Repoclosure (newest, then newest+best; regenerate-and-retry on failure)
         # the scope guard must not hide a real dependency break: run the
         # closure check whenever the drop-in installed, hygiene or not, so
