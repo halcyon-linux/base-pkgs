@@ -8,7 +8,7 @@
 # wheel macro's multi-line body exploding inside this comment killed the
 # 2026-09-25 CI build).
 Name:           pyprland
-Version:        3.4.4
+Version:        3.4.5
 Release:        1%{?dist}
 Summary:        Hyprland companion daemon and CLI
 License:        MIT
