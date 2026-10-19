@@ -4,7 +4,7 @@
 
 Name:   	noctalia-greeter-git
 Version:	1.6.0^4.%{shortcommit}
-Release:	1%{?dist}
+Release:	2%{?dist}
 %define debug_package %{nil}
 Summary:	A minimal login greeter for greetd that matches the look and feel of Noctalia Shell.
 
@@ -27,6 +27,7 @@ BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(glesv2)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  pkgconfig(libjxl)
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(pango)
@@ -79,5 +80,8 @@ done
 %{_datadir}/polkit-1/actions/org.noctalia.greeter.apply-appearance.policy
 
 %changelog
+* Mon Oct 19 2026 halcyon-linux <aahsnr041@proton.me> - 1.6.0^4.434b809-2
+- add pkgconfig(libjxl) BuildRequires: upstream commit 434b809 added a
+  libjxl dependency, and meson configure failed without it
 * Wed Sep 23 2026 halcyon-autobump <aahsnr041@proton.me>
 - converted to an explicit Release and changelog for the anda build
