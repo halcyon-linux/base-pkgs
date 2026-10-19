@@ -1,6 +1,6 @@
 Name:           hyprland-protocols
 Version:	0.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 %define debug_package %{nil}
 Summary:        Wayland protocol extensions for Hyprland
 BuildArch:      noarch
@@ -10,6 +10,7 @@ URL:            https://github.com/hyprwm/hyprland-protocols
 Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
+BuildRequires:  gcc
 
 %description
 %{summary}.
@@ -52,5 +53,8 @@ Requires:       %{name} = %{version}-%{release}
 
 
 %changelog
+* Mon Oct 19 2026 halcyon-linux <aahsnr041@proton.me> - 0.8.0-2
+- add the gcc BuildRequires: upstream changed CMakeLists.txt from
+  LANGUAGES NONE to LANGUAGES C at 0.8.0, so CMake now looks for a C compiler
 * Wed Sep 23 2026 halcyon-autobump <aahsnr041@proton.me>
 - converted to an explicit Release and changelog for the anda build
