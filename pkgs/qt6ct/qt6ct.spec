@@ -1,19 +1,20 @@
 # Ported from github.com/LionHeartP/hyprlandRPM (qt6ct/qt6ct.spec): same
 # patch, dependencies and file lists. The forgemeta machinery is inlined
-# (Source0 = the GitLab archive of the pinned commit) and the spec carries an
+# (Source0 = the pinned commit archive, fetched from the GitHub mirror because
+# upstream's GitLab intermittently returns 502) and the spec carries an
 # explicit Release + changelog instead of rpmautospec.
 %global commit 00823e41aa60e8fe266d5aee328e82ad1ad94348
 
 Name:    qt6ct
 Version: 0.11
-Release: 15%{?dist}
+Release: 16%{?dist}
 %define debug_package %{nil}
 Summary: Qt6 - Configuration Tool
 
 License: BSD-2-Clause
 URL:     https://www.opencode.net/trialuser/qt6ct
 
-Source0: %{url}/-/archive/%{commit}/qt6ct-%{commit}.tar.gz
+Source0: https://github.com/trialuser02/qt6ct/archive/%{commit}/qt6ct-%{commit}.tar.gz
 Patch0:  qt6ct-shenanigans.patch
 
 BuildRequires: cmake
@@ -68,5 +69,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_libdir}/libqt6ct-common.so.%{version}*
 
 %changelog
+* Mon Oct 19 2026 halcyon-linux <aahsnr041@proton.me> - 0.11-16
+- fetch the source archive from the GitHub mirror: upstream's GitLab
+  intermittently returns 502 during spectool downloads
 * Thu Sep 24 2026 halcyon-autobump <aahsnr041@proton.me> - 0.11-15
 - ported from LionHeartP/hyprlandRPM (their -b15 base release)
