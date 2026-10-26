@@ -3,7 +3,7 @@
 # file and SVG icon, upstream entry points nwg-displays, nwg-displays-apply
 # and nwg-displays-toggle-wallpapers.
 Name:           nwg-displays
-Version:        0.4.4
+Version:        0.5.0
 Release:        1%{?dist}
 Summary:        Output configuration utility for Hyprland and Sway
 License:        MIT
