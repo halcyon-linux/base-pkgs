@@ -1,6 +1,6 @@
 Name:           hyprland
 Version:        0.56.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 %define debug_package %{nil}
 Summary:        Dynamic tiling Wayland compositor that doesn't sacrifice on its looks
 
@@ -252,29 +252,31 @@ source /usr/lib/gcc-toolset/15-env.source
 %cmake_install
 install -Dpm644 %{SOURCE4} -t %{buildroot}%{_rpmconfigdir}/macros.d
 
-# upstream CMake installs the session target into lib64/systemd/user (its
-# LIBDIR default) — a directory systemd never searches on Fedora (Arch uses
-# plain lib, where the same install lands correctly) — move it to the real
-# user unit dir, or the target would sit dead in the filesystem
-mkdir -p %{buildroot}%{_userunitdir}
-mv %{buildroot}%{_libdir}/systemd/user/hyprland-session.target \
-    %{buildroot}%{_userunitdir}/hyprland-session.target
+# The session target list file: rpm rejects an empty %files -f list, so the
+# always-present session desktop entry anchors it, and newer trees that
+# install hyprland-session.target append their claim below.
+touch hyprland-session.files
+echo '%{_datadir}/wayland-sessions/hyprland.desktop' >> hyprland-session.files
+if [[ -f %{buildroot}%{_libdir}/systemd/user/hyprland-session.target ]]; then
+    mkdir -p %{buildroot}%{_userunitdir}
+    mv %{buildroot}%{_libdir}/systemd/user/hyprland-session.target \
+        %{buildroot}%{_userunitdir}/hyprland-session.target
+    echo '%{_userunitdir}/hyprland-session.target' >> hyprland-session.files
+fi
 
 # upstream's lowercase compat name for the binary is created as an absolute
 # symlink; rpm's file check rejects absolute symlinks inside one package —
 # recreate it relative (same directory)
 ln -sf Hyprland %{buildroot}%{_bindir}/hyprland
 
-%files
+%files -f hyprland-session.files
 %license LICENSE LICENSE-udis86 LICENSE-hyprland-protocols
 %{_bindir}/[Hh]yprland
 %{_bindir}/hyprctl
 %{_bindir}/hyprpm
 %{_bindir}/start-hyprland
 %{_datadir}/hypr/
-%{_datadir}/wayland-sessions/hyprland.desktop
 %{_datadir}/xdg-desktop-portal/hyprland-portals.conf
-%{_userunitdir}/hyprland-session.target
 %{_mandir}/man1/hyprctl.1*
 %{_mandir}/man1/Hyprland.1*
 %{bash_completions_dir}/hypr*
@@ -291,6 +293,11 @@ ln -sf Hyprland %{buildroot}%{_bindir}/hyprland
 
 
 %changelog
+* Tue Oct 27 2026 ahsan <aahsnr041@proton.me> - 0.56.2-2
+- make the hyprland-session.target claim conditional (generated %files list):
+  the v0.56.2 release tree predates the target that main-branch snapshots
+  install under lib64/systemd/user, so the unconditional move failed the
+  first Copr build of the stable track
 * Tue Oct 27 2026 ahsan <aahsnr041@proton.me> - 0.56.2-1
 - switch to stable release tracking: build upstream's official source-v
   release asset (submodules bundled, git metadata pre-baked in version.h.in)
