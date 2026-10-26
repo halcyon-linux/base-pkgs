@@ -97,12 +97,38 @@ def custom_gnuplot(spec: SpecFile, pkg_dir: Path) -> None:
 def custom_hyprland(spec: SpecFile, pkg_dir: Path) -> None:
     # hyprland tracks the newest upstream RELEASE only (maintainer: no git
     # snapshots). Version is the plain release tag; the official
-    # source-vX.Y.Z.tar.gz asset bundles every subproject, so there is
-    # nothing else to pin — a new release is just a version bump.
+    # source-vX.Y.Z.tar.gz asset bundles every submodule and carries the
+    # git metadata hyprpm needs pre-baked in version.h.in, so there is
+    # nothing else to pin — a new release is just a version bump. The asset
+    # is HEAD-probed before bumping so a tag published without its source
+    # artifact (or with a yanked one) never lands in the spec.
+    import urllib.error
+
     repo = "hyprwm/Hyprland"
     tag = feeds.github_release_tag(repo)
     if not tag:
         raise feeds.FeedError("hyprland: no release found upstream")
+    if spec.get_version() == tag.removeprefix("v"):
+        return
+    asset_url = (
+        "https://github.com/hyprwm/Hyprland/releases/download/"
+        + tag
+        + "/source-"
+        + tag
+        + ".tar.gz"
+    )
+    feeds.validate_url(asset_url)
+    req = urllib.request.Request(
+        asset_url, method="HEAD", headers=feeds._headers_for(asset_url)
+    )
+    try:
+        feeds._open(req)
+    except urllib.error.HTTPError as exc:
+        if exc.code in (403, 404):
+            raise feeds.FeedError(
+                f"hyprland: {tag} ships no source asset yet") from exc
+        raise feeds.FeedError(
+            f"hyprland: HTTP {exc.code} probing {asset_url}") from exc
     spec.set_version(tag.removeprefix("v"))
 
 

@@ -1,20 +1,6 @@
-%global hyprland_commit f6e3a723abdbe64e2d0b36fda9f8985e5b6e040e
-%global hyprland_shortcommit %(c=%{hyprland_commit}; echo ${c:0:7})
-%global bumpver 71
-%global commits_count 7920
-%global commit_date Sun Oct 18 21:34:24 2026
-
-%global protocols_commit cc9a8fd253bdc00f48a967ecf4828211ef08751f
-%global protocols_shortcommit %(c=%{protocols_commit}; echo ${c:0:7})
-
-%global udis86_commit 5336633af70f3917760a6d441ff02d93477b0c86
-%global udis86_shortcommit %(c=%{udis86_commit}; echo ${c:0:7})
-
-%global libxkbcommon_version 1.11.0
-
-Name:           hyprland-git
-Version:        0.56.2%{?bumpver:^%{bumpver}.git%{hyprland_shortcommit}}
-Release:        2%{?dist}
+Name:           hyprland
+Version:        0.56.2
+Release:        1%{?dist}
 %define debug_package %{nil}
 Summary:        Dynamic tiling Wayland compositor that doesn't sacrifice on its looks
 
@@ -27,9 +13,12 @@ Summary:        Dynamic tiling Wayland compositor that doesn't sacrifice on its 
 # protocols/idle.xml: LGPL-2.1-or-later
 License:        BSD-3-Clause AND BSD-2-Clause AND HPND-sell-variant AND LGPL-2.1-or-later
 URL:            https://github.com/hyprwm/Hyprland
-Source0:        %{url}/archive/%{hyprland_commit}/%{name}-%{hyprland_shortcommit}.tar.gz
-Source2:        https://github.com/hyprwm/hyprland-protocols/archive/%{protocols_commit}/protocols-%{protocols_shortcommit}.tar.gz
-Source3:        https://github.com/canihavesomecoffee/udis86/archive/%{udis86_commit}/udis86-%{udis86_shortcommit}.tar.gz
+# upstream's official release asset: the full source tree with every
+# submodule checked out and src/version.h.in pre-filled by upstream CI with
+# the tag's real git metadata (commit hash, branch, tag, commit count).
+# hyprpm reads that metadata at runtime to re-fetch the exact source, so
+# the release asset — not a commit archive — is what keeps hyprpm working.
+Source0:        %{url}/releases/download/v%{version}/source-v%{version}.tar.gz
 Source4:        macros.hyprland
 
 BuildRequires:  cmake
@@ -103,7 +92,7 @@ BuildRequires:  gcc-toolset-15-annobin-plugin-gcc
 
 # udis86 is packaged in Fedora, but the copy bundled here is actually a
 # modified fork.
-Provides:       bundled(udis86) = 1.7.2^1.%{udis86_shortcommit}
+Provides:       bundled(udis86) = 1.7.2^1.5336633
 
 Requires:       xorg-x11-server-Xwayland%{?_isa}
 Requires:       aquamarine%{?_isa} >= 0.9.2
@@ -112,21 +101,11 @@ Requires:       hyprgraphics%{?_isa} >= 0.1.6
 Requires:       hyprlang%{?_isa} >= 0.6.3
 Requires:       hyprutils%{?_isa} >= 0.8.4
 
-%{lua:do
-if string.match(rpm.expand('%{name}'), '%-git$') then
-    print('Conflicts: hyprland'..'\n')
-    print('Obsoletes: hyprland-nvidia-git < 0.32.3^30.gitad3f688-2'..'\n')
-    print(rpm.expand('Provides: hyprland-nvidia-git = %{version}-%{release}')..'\n')
-    print('Obsoletes: hyprland-aquamarine-git < 0.41.2^20.git4b84029-2'..'\n')
-elseif not string.match(rpm.expand('%{name}'), 'hyprland$') then
-    print(rpm.expand('Provides: hyprland = %{version}-%{release}')..'\n')
-    print('Conflicts: hyprland'..'\n')
-else
-    print('Obsoletes: hyprland-nvidia < 1:0.32.3-2'..'\n')
-    print(rpm.expand('Provides: hyprland-nvidia = %{version}-%{release}')..'\n')
-    print('Obsoletes: hyprland-legacyrenderer < 0.49.0'..'\n')
-end
-end}
+Obsoletes:      hyprland-nvidia < 1:0.32.3-2
+Provides:       hyprland-nvidia = %{version}-%{release}
+Obsoletes:      hyprland-legacyrenderer < 0.49.0
+# the retired main-branch snapshot package — replaced by this stable build
+Obsoletes:      hyprland-git
 
 # Used in the default configuration
 Recommends:     kitty
@@ -160,54 +139,87 @@ Files for a uwsm-managed session.
 Summary:        Header and protocol files for %{name}
 License:        BSD-3-Clause
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+# hyprpm's headers build is a full cmake configure of the Hyprland source
+# followed by make installheaders, so -devel carries the whole plugin
+# toolchain: everything the configure step finds via pkg-config plus the
+# build tools hyprpm itself checks for (cpio, cmake, pkg-config, gcc, g++)
 Requires:       cpio
-%{lua:do
-if string.match(rpm.expand('%{name}'), 'hyprland%-git$') then
-    print('Conflicts: hyprland-devel'..'\n')
-    print('Obsoletes: hyprland-nvidia-git-devel < 0.32.3^30.gitad3f688-2'..'\n')
-    print(rpm.expand('Provides: hyprland-nvidia-git-devel = %{version}-%{release}')..'\n')
-    print('Obsoletes: hyprland-aquamarine-git-devel < 0.41.2^20.git4b84029-2'..'\n')
-elseif string.match(rpm.expand('%{name}'), 'hyprland$') then
-    print('Obsoletes: hyprland-nvidia-devel < 1:0.32.3-2'..'\n')
-    print(rpm.expand('Provides: hyprland-nvidia-devel = %{version}-%{release}')..'\n')
-    print('Obsoletes: hyprland-legacyrenderer-devel < 0.49.0'..'\n')
-end
-end}
+Requires:       cmake
+Requires:       make
+Requires:       gcc-c++
+Requires:       meson
+Requires:       ninja-build
+Requires:       pkgconf-pkg-config
 Requires:       git-core
+Requires:       glaze-static
+Requires:       muParser-devel
 Requires:       pkgconfig(aquamarine)
 Requires:       pkgconfig(cairo)
+Requires:       pkgconfig(egl)
+Requires:       pkgconfig(gbm)
+Requires:       pkgconfig(gio-2.0)
+Requires:       pkgconfig(glesv2)
+Requires:       pkgconfig(glslang)
+Requires:       pkgconfig(hwdata)
 Requires:       pkgconfig(hyprcursor)
 Requires:       pkgconfig(hyprgraphics)
 Requires:       pkgconfig(hyprlang)
 Requires:       pkgconfig(hyprutils)
+Requires:       pkgconfig(hyprwayland-scanner)
+Requires:       pkgconfig(hyprwire)
+Requires:       pkgconfig(lcms2)
+Requires:       pkgconfig(libcanberra)
+Requires:       pkgconfig(libdisplay-info)
+Requires:       pkgconfig(libdrm)
+Requires:       pkgconfig(libeis-1.0)
+Requires:       pkgconfig(libinput) >= 1.28
+Requires:       pkgconfig(libliftoff)
+Requires:       pkgconfig(libseat)
+Requires:       pkgconfig(libudev)
+Requires:       pkgconfig(lua)
+Requires:       pkgconfig(pango)
+Requires:       pkgconfig(pangocairo)
 Requires:       pkgconfig(pixman-1)
+Requires:       pkgconfig(re2)
+Requires:       pkgconfig(readline)
+Requires:       pkgconfig(sdbus-c++)
+Requires:       pkgconfig(systemd)
+Requires:       pkgconfig(tomlplusplus)
+Requires:       pkgconfig(uuid)
 Requires:       pkgconfig(wayland-client)
+Requires:       pkgconfig(wayland-protocols) >= 1.45
+Requires:       pkgconfig(wayland-scanner)
+Requires:       pkgconfig(wayland-server)
+Requires:       pkgconfig(xcb)
+Requires:       pkgconfig(xcb-composite)
+Requires:       pkgconfig(xcb-dri3)
+Requires:       pkgconfig(xcb-errors)
+Requires:       pkgconfig(xcb-ewmh)
+Requires:       pkgconfig(xcb-icccm)
+Requires:       pkgconfig(xcb-present)
+Requires:       pkgconfig(xcb-render)
+Requires:       pkgconfig(xcb-renderutil)
+Requires:       pkgconfig(xcb-res)
+Requires:       pkgconfig(xcb-shm)
+Requires:       pkgconfig(xcb-util)
+Requires:       pkgconfig(xcb-xfixes)
+Requires:       pkgconfig(xcb-xinput)
+Requires:       pkgconfig(xcursor)
 Requires:       pkgconfig(xkbcommon)
+Requires:       pkgconfig(xwayland)
+Obsoletes:      hyprland-nvidia-devel < 1:0.32.3-2
+Provides:       hyprland-nvidia-devel = %{version}-%{release}
+Obsoletes:      hyprland-legacyrenderer-devel < 0.49.0
+Obsoletes:      hyprland-git-devel
 
 %description    devel
 %{summary}.
 
 
 %prep
-%autosetup -n Hyprland-%{hyprland_commit} -N
+%autosetup -n hyprland-source -N
 # Fedora names it lua.pc . The correct version is ensured in the BuildRequires section
 sed -i 's/lua55/lua/g' CMakeLists.txt
-%if 0%{?fedora} == 43
-sed -i 's/\.subview(/ .substr(/g' src/ipc/s1/S1.cpp
-sed -i '/return (.* || std::ranges::starts_with(str_view, prefixes));/c\
-    auto check = [&](auto prefix) { return std::string(str_view.begin(), str_view.end()).starts_with(prefix); };\
-    return (... || check(prefixes));' src/helpers/MiscFunctions.cpp
-%endif
-
-tar -xf %{SOURCE2} -C subprojects/hyprland-protocols --strip=1
-tar -xf %{SOURCE3} -C subprojects/udis86 --strip=1
-sed -e '/GIT_COMMIT_HASH/s/unknown/%{hyprland_commit}/' \
-    -e '/GIT_BRANCH/s/unknown/main/' \
-    -e '/GIT_COMMIT_DATE/s/unknown/%{commit_date}/' \
-    -e '/GIT_TAG/s/unknown/%{lua:print((rpm.expand("%{version}"):gsub("[%^~].*", "")))}/' \
-    -e '/GIT_DIRTY/s/unknown/clean/' \
-    -e '/GIT_COMMITS/s/0/%{commits_count}/' \
-    -i CMakeLists.txt
 
 cp -p subprojects/hyprland-protocols/LICENSE LICENSE-hyprland-protocols
 cp -p subprojects/udis86/LICENSE LICENSE-udis86
@@ -279,6 +291,15 @@ ln -sf Hyprland %{buildroot}%{_bindir}/hyprland
 
 
 %changelog
+* Tue Oct 27 2026 ahsan <aahsnr041@proton.me> - 0.56.2-1
+- switch to stable release tracking: build upstream's official source-v
+  release asset (submodules bundled, git metadata pre-baked in version.h.in)
+  instead of main-branch snapshots, renaming hyprland-git to hyprland
+  (obsoleted) — the release asset is what keeps hyprpm update working, since
+  hyprpm re-fetches the exact commit the binary reports
+- ship the full hyprpm toolchain in -devel (cmake, make, meson, ninja and
+  every pkgconfig dependency the headers build needs) so hyprpm update
+  works out of the box on consumers
 * Sun Sep 27 2026 ahsan <aahsnr041@proton.me> - 0.56.2^64.git9a1ea29-2
 - fix the Copr check-files failures: claim hyprland-session.target (upstream
   CMake installs it under lib64/systemd/user, which systemd never searches on

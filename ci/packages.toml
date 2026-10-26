@@ -24,7 +24,7 @@
 #          noctalia-greeter-git, nwg-look (runtime-requires xcur2png)
 # batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit,
 #          xdg-desktop-portal-hyprland
-# batch 3  third level: hyprland-git, hyprland-guiutils, hyprpwcenter,
+# batch 3  third level: hyprland, hyprland-guiutils, hyprpwcenter,
 #          hyprshutdown, noctalia-git
 # The optional [pkg.updates] table drives the daily sweep (update.yml):
 #   feed = "github-release"  + repo = "owner/name"   latest GitHub release tag
@@ -147,13 +147,16 @@ feed = "github-release"
 repo = "hyprwm/hyprtoolkit"
 
 # --- batch 3 ------------------------------------------------------------
-# hyprland-git: needs glaze (batch 0), hyprwire (batch 1), hyprcursor (batch 2).
-[hyprland-git]
+# hyprland: needs glaze (batch 0), hyprwire (batch 1), hyprcursor (batch 2).
+# Tracks upstream STABLE releases only (the official source-v release asset,
+# which bundles every submodule and pre-bakes the git metadata hyprpm needs);
+# the old main-branch snapshot package hyprland-git is retired.
+[hyprland]
 batch = 3
 
-[hyprland-git.updates]
+[hyprland.updates]
 feed = "custom"
-custom = "hyprland-git"
+custom = "hyprland"
 
 # noctalia-git: the desktop shell itself, git-tracked.
 [noctalia-git]
