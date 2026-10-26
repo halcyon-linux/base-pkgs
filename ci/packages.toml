@@ -21,7 +21,7 @@
 #          hyprwayland-scanner, hyprland-protocols, glaze, pyprland,
 #          nwg-displays, xcur2png, qt6ct, adw-gtk3)
 # batch 1  first level: hyprlang, aquamarine, hyprgraphics, hyprwire,
-#          noctalia-greeter-git, nwg-look (runtime-requires xcur2png)
+#          nwg-look (runtime-requires xcur2png)
 # batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit,
 #          xdg-desktop-portal-hyprland
 # batch 3  third level: hyprland, hyprland-guiutils, hyprpwcenter,
@@ -105,14 +105,6 @@ batch = 1
 [hyprwire.updates]
 feed = "github-release"
 repo = "hyprwm/hyprwire"
-
-# noctalia-greeter: standalone greeter (all build deps in Fedora 44).
-[noctalia-greeter-git]
-batch = 1
-
-[noctalia-greeter-git.updates]
-feed = "custom"
-custom = "noctalia-greeter-git"
 
 # --- batch 2 ------------------------------------------------------------
 # hyprcursor needs hyprlang (batch 1).
