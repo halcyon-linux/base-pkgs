@@ -22,14 +22,14 @@
 name: update
 
 on:
-  # two triggers, two purposes: the weekly cron is the floor (sweeps even in
-  # a week with no cascade), and the workflow_run chain sweeps right after
+  # two triggers, two purposes: the daily cron is the floor (sweeps even on
+  # a day with no cascade), and the workflow_run chain sweeps right after
   # every successful copr-build so fresh builds meet the newest upstream
   # immediately. A bump's own cascade re-triggers the sweep once more; that
   # second run finds nothing upstream and exits without committing, so the
   # chain ends.
   schedule:
-    - cron: "17 04 * * 1"
+    - cron: "17 04 * * *"
   workflow_run:
     workflows: [copr-build]
     types: [completed]
@@ -125,8 +125,11 @@ jobs:
           done
           echo "bumped and pushed: ${pkgs}"
           # a GITHUB_TOKEN push does not trigger workflow runs — dispatch the
-          # cascade explicitly
-          GH_TOKEN="${{ github.token }}" gh workflow run copr-build.yml --ref main -f only="$pkgs"
+          # cascade explicitly; dependents=true rebuilds everything that
+          # BuildRequires a bumped package (a new hyprutils soname must reach
+          # hyprlang, aquamarine, hyprland, …), not just the bumped specs
+          GH_TOKEN="${{ github.token }}" gh workflow run copr-build.yml --ref main \
+            -f only="$pkgs" -f dependents=true
       - name: Open a bump PR (mode=pr)
         if: env.MODE == 'pr' && success()
         env:

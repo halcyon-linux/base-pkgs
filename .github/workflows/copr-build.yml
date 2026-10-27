@@ -37,6 +37,11 @@ on:
         description: "Packages to build (space separated); empty = all"
         required: false
         default: ""
+      dependents:
+        description: "Also rebuild everything that BuildRequires the packages in 'only'"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -147,12 +152,17 @@ jobs:
         id: selection
         env:
           ONLY: ${{ inputs.only }}
+          DEPENDENTS: ${{ inputs.dependents }}
           EVENT: ${{ github.event_name }}
           BEFORE: ${{ github.event.before }}
         run: |
           set -eu
           if [ -n "${ONLY:-}" ]; then
-            echo "args=--only ${ONLY}" >> "$GITHUB_OUTPUT"
+            if [ "${DEPENDENTS:-false}" = true ]; then
+              echo "args=--only ${ONLY} --dependents" >> "$GITHUB_OUTPUT"
+            else
+              echo "args=--only ${ONLY}" >> "$GITHUB_OUTPUT"
+            fi
           elif [ "$EVENT" = push ] && [ -n "${BEFORE:-}" ] \
                && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
                && git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then

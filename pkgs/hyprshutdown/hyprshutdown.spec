@@ -1,6 +1,6 @@
 Name:    	hyprshutdown
 Version: 	0.1.1
-Release: 	3%{?dist}
+Release: 	4%{?dist}
 %define debug_package %{nil}
 Summary: 	A graceful shutdown utility for Hyprland
 License: 	BSD-3-Clause
@@ -19,11 +19,11 @@ BuildRequires: 	pkgconfig(pixman-1)
 BuildRequires: 	pkgconfig(wayland-client)
 BuildRequires: 	systemd-devel
 
-Requires:	(hyprland or hyprland-git)
+Requires:	hyprland
 Requires:	systemd
 
 %description
-hyprshutdown is a graceful shutdown/logout utility for Hyprland, which prevents apps from crashing / dying unexpectedly..
+hyprshutdown is a graceful shutdown/logout utility for Hyprland, which prevents apps from crashing / dying unexpectedly.
 
 %prep
 %autosetup
@@ -41,5 +41,7 @@ hyprshutdown is a graceful shutdown/logout utility for Hyprland, which prevents 
 %{_bindir}/hyprshutdown
 
 %changelog
+* Tue Oct 27 2026 halcyon-linux <aahsnr041@proton.me> - 0.1.1-4
+- require hyprland directly: hyprland-git is retired (hyprland obsoletes it)
 * Wed Sep 23 2026 halcyon-autobump <aahsnr041@proton.me>
 - converted to an explicit Release and changelog for the anda build

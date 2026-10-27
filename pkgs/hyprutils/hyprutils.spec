@@ -40,8 +40,9 @@ Development files for %{name}.
 %files
 %license LICENSE
 %doc README.md
-%{_libdir}/lib%{name}.so.%{version}
-%{_libdir}/lib%{name}.so.13
+# soname globbed: upstream bumps SOVERSION on ABI breaks and the
+# sweep must follow a release without a spec edit
+%{_libdir}/lib%{name}.so.*
 
 %files devel
 %{_includedir}/%{name}/

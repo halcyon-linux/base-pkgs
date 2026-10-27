@@ -3,7 +3,7 @@
 Name:           xdg-desktop-portal-hyprland
 Epoch:          1
 Version:        1.4.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 %define debug_package %{nil}
 Summary:        xdg-desktop-portal backend for hyprland
 
@@ -42,7 +42,6 @@ Requires:       qt6-qtwayland
 
 Enhances:       hyprland
 Supplements:    hyprland
-Supplements:    hyprland-git
 
 Provides:       bundled(sdbus-cpp) = %{sdbus_version}
 
@@ -82,5 +81,7 @@ tar -xf %{SOURCE1} -C subprojects/sdbus-cpp --strip=1
 
 
 %changelog
+* Tue Oct 27 2026 halcyon-linux <aahsnr041@proton.me> - 1:1.4.1-2
+- drop the Supplements on the retired hyprland-git
 * Wed Sep 23 2026 halcyon-autobump <aahsnr041@proton.me>
 - converted to an explicit Release and changelog for the anda build

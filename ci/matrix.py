@@ -15,6 +15,10 @@ Selection semantics:
                 touches no registered package. A spec whose BuildRequires
                 cannot be parsed confidently is seeded on every lower-batch
                 change (with its own dependents following).
+  --only PKG... exactly those packages; add --dependents to pull in their
+                transitive BuildRequires dependents too (what the update
+                workflow dispatches after a bump: a bumped library changes
+                what its dependents link against).
   no --since    the whole registry (first submission / manual full runs).
 
 Batch numbers come from ci/packages.toml, which stays the dependency-order
@@ -26,8 +30,8 @@ The same registry carries each package's [pkg.updates] sweep configuration
 (consumed by ci/sweep/sweep.py); matrix.py ignores it.
 
 Usage:
-  ci/matrix.py [--since REV] [--only PKG...] [--batch N ...] [--list]
-               [--label LABEL=VALUE]
+  ci/matrix.py [--since REV] [--only PKG... [--dependents]] [--batch N ...]
+               [--list] [--label LABEL=VALUE]
 
 With --label each emitted entry carries extra labels (the workflow uses
 labels.batch to wave the matrix). Without --list the script prints
@@ -133,6 +137,7 @@ def select(
     only: list[str] | None,
     batches: list[int] | None,
     since: str | None,
+    with_dependents: bool = False,
 ) -> set[str]:
     """Resolve --only / --batch / --since into the package names to build."""
     if only and since:
@@ -147,6 +152,8 @@ def select(
         if unknown:
             die(f"not in {PACKAGES_FILE}: {', '.join(unknown)}")
         chosen &= set(only)
+    if with_dependents and chosen:
+        chosen = dependents_closure(pkgs, chosen)
     if batches:
         chosen &= {n for n, meta in pkgs.items() if meta["batch"] in batches}
     return chosen
@@ -191,7 +198,7 @@ def _resolve_token(token: str, registry: dict[str, str]) -> str | None:
     name = token
     if name.startswith(("pkgconfig(", "cmake(")) and name.endswith(")"):
         name = name[name.index("(") + 1 : -1]
-    for cand in (name, name.removesuffix("-devel")):
+    for cand in (name, name.removesuffix("-devel"), name.removesuffix("-static")):
         if cand in registry:
             return cand
     lowered = registry.get(name.lower())
@@ -310,6 +317,11 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--since", help="git revision; build everything changed since it")
     ap.add_argument("--only", nargs="*", help="build only these packages")
+    ap.add_argument(
+        "--dependents", action="store_true",
+        help="with --only: also rebuild everything that BuildRequires the "
+             "selected packages (transitively) — the cascade after a version bump",
+    )
     ap.add_argument("--batch", nargs="*", type=int, help="build only these batch numbers")
     ap.add_argument(
         "--label", action="append", default=[],
@@ -319,7 +331,7 @@ def main() -> None:
     args = ap.parse_args()
 
     pkgs = load_packages()
-    chosen = select(pkgs, args.only, args.batch, args.since)
+    chosen = select(pkgs, args.only, args.batch, args.since, args.dependents)
     if not chosen:
         print("matrix.py: nothing to build")
         return

@@ -12,12 +12,14 @@ applications · fonts · texlive-packages · linux-p03.
 
 ## CI
 
-- `copr-build.yml` — a push to `main` rebuilds changed packages plus every
-  higher batch, wave-by-wave. Gated on the `CASCADE_ENABLED` repository
+- `copr-build.yml` — a push to `main` rebuilds changed packages plus their
+  BuildRequires dependents, wave-by-wave by batch. Gated on the `CASCADE_ENABLED` repository
   variable (kill-switch; `workflow_dispatch` bypasses it). PRs validate
   only.
 - `update.yml` — the upstream version sweep (`ci/sweep/sweep.py` over the
-  registry's `[pkg.updates]` feeds), commits bumps straight to `main`.
+  registry's `[pkg.updates]` feeds), daily and after every successful build;
+  commits bumps straight to `main` and dispatches `copr-build.yml` for the
+  bumped packages plus everything that BuildRequires them.
 - `repoclosure.yml` — nightly (05:43 UTC) + post-cascade closure check of
   the published Copr repo against Fedora 44/45 (+ Terra and the
   lionheartp bootstrap repo).
@@ -39,7 +41,7 @@ gh workflow run <file> -R halcyon-linux/base-pkgs --ref main -f <input>=<value>
 
 Inputs (leave empty for the default):
 
-- `copr-build.yml` — `only`: space-separated packages to build (empty = all), e.g. `-f only="<pkg> <pkg>"`. Bypasses the `CASCADE_ENABLED` gate.
+- `copr-build.yml` — `only`: space-separated packages to build (empty = all), e.g. `-f only="<pkg> <pkg>"`; `dependents`: also rebuild their transitive BuildRequires dependents. Bypasses the `CASCADE_ENABLED` gate.
 - `update.yml` — `mode`: `commit` or `pr`; `pkg`: space-separated packages to sweep (empty = all).
 - `repoclosure.yml`, `builder-docker.yml` — no inputs.
 
@@ -58,7 +60,7 @@ Inputs (leave empty for the default):
 A force cancel ends the run without waiting for its jobs. It does not stop Copr
 builds that were already submitted; cancel those on the Copr project page.
 
-**Caution:** if a `update.yml` run is cancelled after it has pushed a bump, that bump can be left without a `copr-build` run. Dispatch `copr-build.yml` with `only` set to the bumped packages.
+**Caution:** if a `update.yml` run is cancelled after it has pushed a bump, that bump can be left without a `copr-build` run. Dispatch `copr-build.yml` with `only` set to the bumped packages and `dependents` ticked.
 
 ## Layout
 
@@ -71,4 +73,4 @@ repo/               the base-pkgs.repo consumer drop-in
 templates/          starting points for new specs
 ```
 
-See [AGENTS.md](AGENTS.md) for the conventions before touching specs.
+See [CLAUDE.md](CLAUDE.md) for the conventions before touching specs.

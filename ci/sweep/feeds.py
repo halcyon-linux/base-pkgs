@@ -170,6 +170,9 @@ def github_tag_names(repo: str) -> list[str]:
     return names
 
 
+_STABLE_TAG = re.compile(r"^[0-9]+(\.[0-9]+)*$")
+
+
 def github_latest_tag(repo: str) -> str:
     """gh_tag() port: the newest git tag (releases or not), leading `v`
     stripped. The per-name v-strip before comparing is not cosmetic:
@@ -177,7 +180,9 @@ def github_latest_tag(repo: str) -> str:
     `0.1.0-beta`, and rpmvercmp ranks a leading digit over a leading letter —
     comparing raw names picks the prehistoric tag.
     Empty when the repo has no tags — callers treat that as 'stay on the
-    current version base'."""
+    current version base'.
+    Only plain dotted-numeric tags rank: rc/beta/alpha tags (3.5.0-rc1) are
+    skipped so a pre-release never becomes the packaged version."""
     names = github_tag_names(repo)
     if not names:
         return ""
@@ -186,6 +191,8 @@ def github_latest_tag(repo: str) -> str:
     best = ""
     for name in names:
         stripped = name.removeprefix("v")
+        if not _STABLE_TAG.match(stripped):
+            continue
         if not best or rpmvercmp(stripped, best) > 0:
             best = stripped
     return best

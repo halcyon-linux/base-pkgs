@@ -43,8 +43,9 @@ Development files for %{name}.
 %license LICENSE
 %doc README.md
 %{_bindir}/hyprcursor-util
-%{_libdir}/lib%{name}.so.%{version}
-%{_libdir}/lib%{name}.so.0
+# soname globbed: upstream bumps SOVERSION on ABI breaks and the
+# sweep must follow a release without a spec edit
+%{_libdir}/lib%{name}.so.*
 
 %files devel
 # 0.1.13 also installs a root-level C++ header alongside include/hyprcursor/

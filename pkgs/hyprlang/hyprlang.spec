@@ -41,8 +41,9 @@ sed 's/.*/%{version}/' -i VERSION
 %files
 %license LICENSE
 %doc README.md
-%{_libdir}/libhyprlang.so.2
-%{_libdir}/libhyprlang.so.%{version}
+# soname globbed: upstream bumps SOVERSION on ABI breaks and the
+# sweep must follow a release without a spec edit
+%{_libdir}/libhyprlang.so.*
 
 %files devel
 %{_includedir}/hyprlang.hpp

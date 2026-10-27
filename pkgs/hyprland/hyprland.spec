@@ -1,6 +1,6 @@
 Name:           hyprland
 Version:        0.56.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 %define debug_package %{nil}
 Summary:        Dynamic tiling Wayland compositor that doesn't sacrifice on its looks
 
@@ -119,6 +119,10 @@ Recommends:     mesa-dri-drivers
 Recommends:     polkit
 # https://wiki.hyprland.org/Useful-Utilities/Systemd-start
 Recommends:     %{name}-uwsm
+# hyprpm (shipped here) refuses to run without cmake, cpio, pkg-config, git,
+# g++ and gcc, and `hyprpm update` configures the full Hyprland source tree;
+# -devel carries that whole toolchain, so pull it in by default
+Recommends:     %{name}-devel = %{version}-%{release}
 
 Recommends:     (qt5-qtwayland if qt5-qtbase-gui)
 Recommends:     (qt6-qtwayland if qt6-qtbase-gui)
@@ -293,6 +297,10 @@ ln -sf Hyprland %{buildroot}%{_bindir}/hyprland
 
 
 %changelog
+* Tue Oct 27 2026 halcyon-linux <aahsnr041@proton.me> - 0.56.2-3
+- recommend hyprland-devel from the main package so `hyprpm update` finds
+  its toolchain (cmake, cpio, pkg-config, git, g++, gcc, make and every
+  build dependency of the headers configure) on a default install
 * Tue Oct 27 2026 ahsan <aahsnr041@proton.me> - 0.56.2-2
 - make the hyprland-session.target claim conditional (generated %files list):
   the v0.56.2 release tree predates the target that main-branch snapshots
