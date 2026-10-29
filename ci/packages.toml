@@ -25,9 +25,7 @@
 # batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit,
 #          xdg-desktop-portal-hyprland
 # batch 3  third level: hyprland, hyprland-guiutils, hyprpwcenter,
-#          hyprshutdown
-# (the noctalia desktop shell is no longer built here — consumers install
-# Terra's stable package)
+#          hyprshutdown, noctalia-git
 # The optional [pkg.updates] table drives the daily sweep (update.yml):
 #   feed = "github-release"  + repo = "owner/name"   latest GitHub release tag
 #   feed = "github-tag"      + repo = "owner/name"   newest git tag
@@ -151,6 +149,14 @@ batch = 3
 [hyprland.updates]
 feed = "custom"
 custom = "hyprland"
+
+# noctalia-git: the desktop shell itself, git-tracked.
+[noctalia-git]
+batch = 3
+
+[noctalia-git.updates]
+feed = "custom"
+custom = "noctalia-git"
 
 # the hyprtoolkit dependents: hyprtoolkit is batch 2, these wait for
 # it to publish.
