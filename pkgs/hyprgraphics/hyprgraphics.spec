@@ -1,6 +1,6 @@
 Name:           hyprgraphics
-Version:        0.5.1
-Release:        3%{?dist}
+Version:        0.6.0
+Release:        1%{?dist}
 %define debug_package %{nil}
 Summary:        Hyprland graphics / resource utilities
 

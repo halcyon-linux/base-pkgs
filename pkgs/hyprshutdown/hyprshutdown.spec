@@ -1,6 +1,6 @@
 Name:    	hyprshutdown
-Version: 	0.1.1
-Release: 	4%{?dist}
+Version: 	0.1.2
+Release: 	1%{?dist}
 %define debug_package %{nil}
 Summary: 	A graceful shutdown utility for Hyprland
 License: 	BSD-3-Clause
