@@ -22,10 +22,9 @@
 #          nwg-displays, xcur2png, qt6ct, adw-gtk3)
 # batch 1  first level: hyprlang, aquamarine, hyprgraphics, hyprwire,
 #          nwg-look (runtime-requires xcur2png)
-# batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit,
-#          xdg-desktop-portal-hyprland
+# batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit
 # batch 3  third level: hyprland, hyprland-guiutils, hyprpwcenter,
-#          hyprshutdown, noctalia-git
+#          hyprshutdown, noctalia-git, xdg-desktop-portal-hyprland
 # The optional [pkg.updates] table drives the daily sweep (update.yml):
 #   feed = "github-release"  + repo = "owner/name"   latest GitHub release tag
 #   feed = "github-tag"      + repo = "owner/name"   newest git tag
@@ -121,14 +120,6 @@ batch = 2
 feed = "github-release"
 repo = "hyprwm/hyprland-qt-support"
 
-# xdg-desktop-portal-hyprland needs hyprlang (batch 1) + batch 0 protocols/utils.
-[xdg-desktop-portal-hyprland]
-batch = 2
-
-[xdg-desktop-portal-hyprland.updates]
-feed = "custom"
-custom = "xdg-desktop-portal-hyprland"
-
 # hyprtoolkit: GUI toolkit for guiutils/pwcenter/shutdown (needs
 # aquamarine + hyprgraphics + hyprlang from batch 1).
 [hyprtoolkit]
@@ -149,6 +140,15 @@ batch = 3
 [hyprland.updates]
 feed = "custom"
 custom = "hyprland"
+
+# xdg-desktop-portal-hyprland: 1.5.0's share picker links hyprtoolkit
+# (batch 2), on top of hyprlang (batch 1) and the batch 0 protocols/utils.
+[xdg-desktop-portal-hyprland]
+batch = 3
+
+[xdg-desktop-portal-hyprland.updates]
+feed = "custom"
+custom = "xdg-desktop-portal-hyprland"
 
 # noctalia-git: the desktop shell itself, git-tracked.
 [noctalia-git]
