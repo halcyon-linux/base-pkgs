@@ -25,6 +25,9 @@ GITHUB_API = "https://api.github.com"
 ALLOWED_HOSTS = frozenset({
     "api.github.com",
     "github.com",
+    # GitHub redirects release-asset downloads here; the hyprland feed
+    # HEAD-probes its source asset before bumping.
+    "release-assets.githubusercontent.com",
     "raw.githubusercontent.com",
     "sourceforge.net",
     "aur.archlinux.org",
