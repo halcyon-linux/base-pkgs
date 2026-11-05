@@ -1,12 +1,12 @@
 # Noctalia desktop shell (v5, C++/meson — no quickshell runtime). Spec follows
 # terrapkg/packages' noctalia-nightly recipe, tracking main branch tip.
 %global debug_package   %{nil}
-%global commit          5e4aae910b764c7aeee411f741a266263f104375
+%global commit          2d64bbebfac0c4b7a007c71f7738f055e75c5e40
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 %global upstreamname    noctalia
 
 Name:   	noctalia-git
-Version:	5.4.1^8.%{shortcommit}
+Version:	5.4.1^9.%{shortcommit}
 Release:	1%{?dist}
 Summary:	A sleek, customizable desktop shell crafted for Wayland
 
