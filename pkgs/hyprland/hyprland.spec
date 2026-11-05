@@ -225,7 +225,6 @@ Obsoletes:      hyprland-git-devel
 # Fedora names it lua.pc . The correct version is ensured in the BuildRequires section
 sed -i 's/lua55/lua/g' CMakeLists.txt
 
-cp -p subprojects/hyprland-protocols/LICENSE LICENSE-hyprland-protocols
 cp -p subprojects/udis86/LICENSE LICENSE-udis86
 
 sed -i \
@@ -274,7 +273,7 @@ fi
 ln -sf Hyprland %{buildroot}%{_bindir}/hyprland
 
 %files -f hyprland-session.files
-%license LICENSE LICENSE-udis86 LICENSE-hyprland-protocols
+%license LICENSE LICENSE-udis86
 %{_bindir}/[Hh]yprland
 %{_bindir}/hyprctl
 %{_bindir}/hyprpm
