@@ -5,8 +5,7 @@ Release:        1%{?dist}
 Summary:        Dynamic tiling Wayland compositor that doesn't sacrifice on its looks
 
 # hyprland: BSD-3-Clause
-# subprojects/hyprland-protocols: BSD-3-Clause
-# subproject/udis86: BSD-2-Clause
+# subprojects/udis86: BSD-2-Clause
 # protocols/ext-workspace-unstable-v1.xml: HPND-sell-variant
 # protocols/wlr-foreign-toplevel-management-unstable-v1.xml: HPND-sell-variant
 # protocols/wlr-layer-shell-unstable-v1.xml: HPND-sell-variant
