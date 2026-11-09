@@ -1,6 +1,6 @@
 Name:           hyprcursor
-Version:        0.1.13
-Release:        2%{?dist}
+Version:        0.1.14
+Release:        1%{?dist}
 %define debug_package %{nil}
 Summary:        The hyprland cursor format, library and utilities
 
