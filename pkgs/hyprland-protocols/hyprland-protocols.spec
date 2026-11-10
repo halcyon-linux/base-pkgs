@@ -1,6 +1,6 @@
 Name:           hyprland-protocols
 Version:	0.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 %define debug_package %{nil}
 Summary:        Wayland protocol extensions for Hyprland
 BuildArch:      noarch
@@ -45,14 +45,18 @@ Requires:       %{name} = %{version}-%{release}
 %files
 %license LICENSE
 %{_datadir}/%{name}/
+%{_datadir}/pkgconfig/%{name}.pc
 
 %files devel
 %license LICENSE
 %doc README.md
-%{_datadir}/pkgconfig/%{name}.pc
 
 
 %changelog
+* Tue Nov 10 2026 halcyon-linux <aahsnr041@proton.me> - 0.8.0-3
+- ship hyprland-protocols.pc in the base package so pkg-config (and hyprpm
+  update's REQUIRED cmake pkg_check_modules hyprland-protocols>=0.8.0)
+  resolves with hyprland-protocols alone, without -devel
 * Mon Oct 19 2026 halcyon-linux <aahsnr041@proton.me> - 0.8.0-2
 - add the gcc BuildRequires: upstream changed CMakeLists.txt from
   LANGUAGES NONE to LANGUAGES C at 0.8.0, so CMake now looks for a C compiler
