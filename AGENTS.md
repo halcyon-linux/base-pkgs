@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 RPM packaging repo for the **base-pkgs** Copr project (`aahsnr-work/base-pkgs`): the hyprwm stack, portals and Qt theming for Fedora 44 (+45). Specs live here; Copr builds, signs and serves them. There is no application code to compile locally.
 

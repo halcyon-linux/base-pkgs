@@ -73,4 +73,4 @@ repo/               the base-pkgs.repo consumer drop-in
 templates/          starting points for new specs
 ```
 
-See [CLAUDE.md](CLAUDE.md) for the conventions before touching specs.
+See [AGENTS.md](AGENTS.md) for the conventions before touching specs.
