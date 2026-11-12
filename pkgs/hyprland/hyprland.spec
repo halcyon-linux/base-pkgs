@@ -42,8 +42,7 @@ BuildRequires:  pkgconfig(hyprlang)
 BuildRequires:  pkgconfig(hyprutils)
 BuildRequires:  pkgconfig(hyprwayland-scanner)
 BuildRequires:  pkgconfig(hyprwire)
-BuildRequires:  pkgconfig(hyprland-protocols) >= 0.8.0
-BuildRequires:  hyprland-protocols-devel
+BuildRequires:  hyprland-protocols-devel >=0.8.0
 BuildRequires:  pkgconfig(lcms2)
 BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  pkgconfig(libdisplay-info)
