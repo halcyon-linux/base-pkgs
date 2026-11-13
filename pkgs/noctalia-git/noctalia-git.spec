@@ -72,6 +72,7 @@ A sleek, customizable desktop shell crafted for Wayland.
 sed -i "s/'unknown'/'v%{version}'/g" meson.build
 
 %build
+%meson
 %meson_build
 
 %install
