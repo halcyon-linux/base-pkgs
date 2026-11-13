@@ -66,12 +66,7 @@ Recommends:     power-profiles-daemon
 A sleek, customizable desktop shell crafted for Wayland.
 
 %prep
-# Manual extraction: tarball has full commit hash, rpmbuild build dir uses short commit
-# Bypass %setup entirely - it always cd's into the short-commit build dir
-mkdir -p %{_builddir}/%{name}-%{version}-%{release}
-cd %{_builddir}/%{name}-%{version}-%{release}
-tar -xzf %{SOURCE0}
-cd %{upstreamname}-%{commit}
+%setup -q -n %{upstreamname}-%{commit}
 
 # report the packaged version instead of meson's 'unknown' fallback
 sed -i "s/'unknown'/'v%{version}'/g" meson.build
