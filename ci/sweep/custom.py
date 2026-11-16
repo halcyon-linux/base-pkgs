@@ -280,7 +280,8 @@ def custom_noctalia_git(spec: SpecFile, pkg_dir: Path) -> None:
     new_commit = feeds.github_commit(repo)
     # old_version as rpmdev sees it (the Version line carries %{shortcommit})
     proc = subprocess.run(
-        ["rpmspec", "-q", "--qf", "%{version}", str(pkg_dir / spec.path.name)],
+        ["rpmspec", "-D", "fedora 45", "-q", "--qf", "%{version}",
+         str(pkg_dir / spec.path.name)],
         check=True, capture_output=True, text=True, cwd=pkg_dir,
     )
     old_version = proc.stdout.strip()
