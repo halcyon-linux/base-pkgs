@@ -10,9 +10,9 @@
 # to the project repo, so a package may rely on anything built in a lower
 # batch. Packages inside one batch must therefore never depend on each other.
 #
-# Build-time dependencies that Fedora 44 does not provide: glaze, hyprwire
+# Build-time dependencies that Fedora 45 does not provide: glaze, hyprwire
 # and hyprtoolkit are packaged in THIS repo (ports of the lionheartp/Hyprland
-# Copr specs; the fourth input, wlroots, ships in Fedora 44 itself). The
+# Copr specs; the fourth input, wlroots, ships in Fedora 45 itself). The
 # lionheartp Copr stays configured on the Copr chroot only as a lowest-
 # priority bootstrap for fresh projects; once our own builds exist, the
 # project repo wins.

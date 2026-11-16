@@ -21,8 +21,8 @@
 # version, so main-line failures are self-healing).
 #
 # External repos (per-chroot, copr-cli edit-chroot): the lionheartp/Hyprland
-# Copr as a lowest-priority bootstrap for fresh projects, and Terra 44 (it
-# supplies anda-srpm-macros, which Fedora 44 does not carry).
+# Copr as a lowest-priority bootstrap for fresh projects, and Terra (it
+# supplies anda-srpm-macros, which Fedora does not carry).
 name: copr-build
 
 on:
@@ -214,7 +214,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -269,7 +269,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -323,7 +323,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -378,7 +378,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -430,7 +430,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -485,7 +485,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -537,7 +537,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}
@@ -592,7 +592,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     container:
-      image: ghcr.io/halcyon-linux/base-pkgs-builder:f44
+      image: ghcr.io/halcyon-linux/base-pkgs-builder:f45
       credentials:
         username: ${{ github.actor }}
         password: ${{ github.token }}

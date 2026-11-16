@@ -1,6 +1,6 @@
 # AGENTS.md
 
-RPM packaging repo for the **base-pkgs** Copr project (`aahsnr-work/base-pkgs`): the hyprwm stack, portals and Qt theming for Fedora 44 (+45). Specs live here; Copr builds, signs and serves them. There is no application code to compile locally.
+RPM packaging repo for the **base-pkgs** Copr project (`aahsnr-work/base-pkgs`): the hyprwm stack, portals and Qt theming for Fedora 45. Specs live here; Copr builds, signs and serves them. There is no application code to compile locally.
 
 ## Layout
 
@@ -45,7 +45,7 @@ CI also runs `bash -n` + `shellcheck -S warning` on `pkgs/*/*.sh` and actionlint
 - Packages carrying patches (`qt6ct`, `hyprland-qt-support`, `xcur2png`) can fail a build after an unattended bump if the patch no longer applies; check the failing Copr build and refresh the patch.
 - `hyprland` tracks stable releases only, using upstream's `source-v<version>` release asset (needed for hyprpm metadata).
 - The noctalia packages are intentionally not built here (consumers use Terra's).
-- Fedora 44 lacks glaze, hyprwire and hyprtoolkit, so they are packaged here. Terra supplies `anda-srpm-macros`.
+- Fedora lacks glaze, hyprwire and hyprtoolkit, so they are packaged here. Terra supplies `anda-srpm-macros`.
 - Workflow actions are pinned by SHA; Renovate handles bumps.
 
 ## Files to ignore

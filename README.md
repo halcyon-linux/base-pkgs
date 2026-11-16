@@ -1,10 +1,10 @@
 # base-pkgs
 
-halcyon desktop core — the hyprwm stack, portals, Qt theming — Fedora 44 (+45) RPMs built on
+halcyon desktop core — the hyprwm stack, portals, Qt theming — Fedora 45 RPMs built on
 [Copr](https://copr.fedorainfracloud.org/coprs/aahsnr-work/base-pkgs/).
 
 ```
-dnf copr enable aahsnr-work/base-pkgs fedora-44
+dnf copr enable aahsnr-work/base-pkgs fedora-45
 ```
 
 One of the six halcyon group repositories: base-pkgs · cli-tools ·
@@ -21,10 +21,10 @@ applications · fonts · texlive-packages · linux-p03.
   commits bumps straight to `main` and dispatches `copr-build.yml` for the
   bumped packages plus everything that BuildRequires them.
 - `repoclosure.yml` — nightly (05:43 UTC) + post-cascade closure check of
-  the published Copr repo against Fedora 44/45 (+ Terra and the
+  the published Copr repo against Fedora 45 (+ Terra and the
   lionheartp bootstrap repo).
 - `builder-docker.yml` — builds this repo's own CI job image and pushes
-  it to `ghcr.io/halcyon-linux/base-pkgs-builder:f44` (consumed by this
+  it to `ghcr.io/halcyon-linux/base-pkgs-builder:f45` (consumed by this
   repo's build and sweep jobs).
 
 

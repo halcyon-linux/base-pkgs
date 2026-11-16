@@ -1,9 +1,8 @@
 # Vendor install of the prebuilt adw-gtk3 theme bundle from the upstream
 # release asset (the file upstream documents as "extract into /usr/share/
 # themes"): adw-gtk3/ and adw-gtk3-dark/ sit at the tarball's top level.
-# v6.x builds from source via meson with the sass binary — dart-sass, which
-# Fedora 44 does not package (only sassc) — so the release bundle is the
-# only viable source here, and it is the upstream distribution artifact.
+# v6.x builds from source via meson with the sass binary, while the release
+# bundle is already the upstream distribution artifact used here.
 # The bundle carries no license file; LICENSE ships as Source1 from the tag
 # (LGPL-2.1, "or any later version" wording).
 Name:           adw-gtk3

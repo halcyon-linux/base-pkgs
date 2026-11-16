@@ -589,7 +589,7 @@ def _proton_rpm_version(ghrepo: str, rpm_name: str, srcarch: str, spec: SpecFile
     # official repo 403s the sweeper's default UA and answers the browser one.
     import urllib.error
 
-    fc = spec.get_global("pv_fc") or "44"
+    fc = spec.get_global("pv_fc") or "45"
     rel = spec.get_global("pv_rel") or "1"
     tags = [t.removeprefix("v") for t in feeds.github_tag_names(f"ProtonVPN/{ghrepo}")]
     for version in tags:
