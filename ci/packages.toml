@@ -24,7 +24,7 @@
 #          nwg-look (runtime-requires xcur2png)
 # batch 2  second level: hyprcursor, hyprland-qt-support, hyprtoolkit
 # batch 3  third level: hyprland, hyprland-guiutils, hyprpwcenter,
-#          hyprshutdown, noctalia-git, xdg-desktop-portal-hyprland
+#          hyprshutdown, xdg-desktop-portal-hyprland
 # The optional [pkg.updates] table drives the daily sweep (update.yml):
 #   feed = "github-release"  + repo = "owner/name"   latest GitHub release tag
 #   feed = "github-tag"      + repo = "owner/name"   newest git tag
@@ -149,14 +149,6 @@ batch = 3
 [xdg-desktop-portal-hyprland.updates]
 feed = "custom"
 custom = "xdg-desktop-portal-hyprland"
-
-# noctalia-git: the desktop shell itself, git-tracked.
-[noctalia-git]
-batch = 3
-
-[noctalia-git.updates]
-feed = "custom"
-custom = "noctalia-git"
 
 # the hyprtoolkit dependents: hyprtoolkit is batch 2, these wait for
 # it to publish.
