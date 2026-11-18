@@ -1,5 +1,5 @@
 Name:           hyprutils
-Version:        0.14.3
+Version:        0.14.4
 Release:        1%{?dist}
 %define debug_package %{nil}
 Summary:        Hyprland utilities library used across the ecosystem
