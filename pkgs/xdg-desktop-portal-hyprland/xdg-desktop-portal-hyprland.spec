@@ -1,4 +1,4 @@
-%global sdbus_version 2.3.1
+%global sdbus_version 2.4.0
 
 Name:           xdg-desktop-portal-hyprland
 Epoch:          1
